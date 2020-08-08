@@ -15,14 +15,21 @@ function App() {
   useEffect(() => {
     const hash = getTokenFromUrl();
     // Clearning the url which has access_token after redirection.
-    window.location.hash = '';
-    const _token = hash.access_token;
-    if (_token) {
+    if (!token) {
+      let _token = hash.access_token;
       dispatch({
         type: 'SET_TOKEN',
         token: _token,
       });
-      spotify.setAccessToken(_token);
+      localStorage.setItem('token', _token);
+      window.location.hash = '';
+    } else {
+      dispatch({
+        type: 'SET_SPOTIFY',
+        spotify,
+      });
+
+      spotify.setAccessToken(token);
       spotify.getMe().then((user) => {
         dispatch({
           type: 'SET_USER',
@@ -46,13 +53,9 @@ function App() {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return (
-    <div className='app'>
-      {token ? <Player spotify={spotify} /> : <Login />}
-    </div>
-  );
+  }, [token, dispatch]);
+  // console.log('token :>> ', token);
+  return <div className='app'>{token ? <Player /> : <Login />}</div>;
 }
 
 export default App;

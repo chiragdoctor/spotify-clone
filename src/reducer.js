@@ -5,8 +5,7 @@ export const initialState = {
   discover_weekly: null,
   item: null,
   // remove after finish developing....
-  token:
-    'BQC2zQxfjXd6ysDxYuspLonRYCvIzDdfdSTsPl8fs_LCugsxzZoibjP0YOf5iHAtjqv7ND87',
+  token: localStorage.getItem('token'),
 };
 
 const reducer = (state, action) => {
@@ -31,6 +30,21 @@ const reducer = (state, action) => {
       return {
         ...state,
         discover_weekly: action.discover_weekly,
+      };
+    case 'SET_SPOTIFY':
+      return {
+        ...state,
+        spotify: action.spotify,
+      };
+    case 'SET_ITEM':
+      return {
+        ...state,
+        item: action.item,
+      };
+    case 'SET_PLAYING':
+      return {
+        ...state,
+        playing: action.playing,
       };
     default:
       return state;
