@@ -29,13 +29,19 @@ function App() {
           user,
         });
       });
-      console.log('heer :>> ');
+
       // get user playlist
       spotify.getUserPlaylists().then((playlists) => {
-        console.log('🤽‍♂️', playlists);
         dispatch({
           type: 'SET_PLAYLISTS',
           playlists,
+        });
+      });
+
+      spotify.getPlaylist('37i9dQZEVXcCR1sa3f3P5V').then((discover_weekly) => {
+        dispatch({
+          type: 'SET_DISCOVER_WEEKLY',
+          discover_weekly,
         });
       });
     }
