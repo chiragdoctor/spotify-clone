@@ -4,7 +4,7 @@ export const initialState = {
   playing: false,
   discover_weekly: null,
   item: null,
-  // remove after finish developing....
+  spotify: null,
   token: localStorage.getItem('token'),
 };
 

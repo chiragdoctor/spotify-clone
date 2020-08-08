@@ -13,10 +13,16 @@ function App() {
   const [{ token }, dispatch] = useDataLayerValue();
   // run code based on given condition
   useEffect(() => {
+    dispatch({
+      type: 'SET_SPOTIFY',
+      spotify,
+    });
+
     const hash = getTokenFromUrl();
     // Clearning the url which has access_token after redirection.
-    if (!token) {
+    if (hash.access_token) {
       let _token = hash.access_token;
+      console.log('_token :>> ', _token);
       dispatch({
         type: 'SET_TOKEN',
         token: _token,
@@ -24,11 +30,7 @@ function App() {
       localStorage.setItem('token', _token);
       window.location.hash = '';
     } else {
-      dispatch({
-        type: 'SET_SPOTIFY',
-        spotify,
-      });
-
+      console.log('token :>> ', token);
       spotify.setAccessToken(token);
       spotify.getMe().then((user) => {
         dispatch({
@@ -53,7 +55,7 @@ function App() {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, dispatch]);
+  }, []);
   // console.log('token :>> ', token);
   return <div className='app'>{token ? <Player /> : <Login />}</div>;
 }

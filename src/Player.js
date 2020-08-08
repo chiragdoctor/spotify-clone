@@ -12,8 +12,6 @@ const Player = () => {
         <Sidebar />
         <Body />
       </div>
-
-      {/* Footer */}
       <Footer />
     </div>
   );
