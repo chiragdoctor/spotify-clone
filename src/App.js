@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import SpotifyWebAPi from 'spotify-web-api-js';
 import './App.css';
 import Login from './Login';
@@ -29,7 +29,17 @@ function App() {
           user,
         });
       });
+      console.log('heer :>> ');
+      // get user playlist
+      spotify.getUserPlaylists().then((playlists) => {
+        console.log('🤽‍♂️', playlists);
+        dispatch({
+          type: 'SET_PLAYLISTS',
+          playlists,
+        });
+      });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
