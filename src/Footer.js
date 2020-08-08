@@ -14,16 +14,16 @@ const Footer = () => {
     <div className='footer'>
       <div className='footer__left'>
         <img src='' alt='' className='footer__albumLogo' />
-        <div className='footer__song'>
+        <div className='footer__songInfo'>
           <h4>Yeah!</h4>
           <p>Usher</p>
         </div>
       </div>
       <div className='footer__center'>
-        <ShuffleIcon className='footer_green' />
-        <SkipPreviousIcon className='footer_icon' />
-        <PlayCircleOutlineIcon fontSize='large' className='footer_icon' />
-        <RepeatIcon className='footer_green' />
+        <ShuffleIcon className='footer__green' />
+        <SkipPreviousIcon className='footer__icon' />
+        <PlayCircleOutlineIcon fontSize='large' className='footer__icon' />
+        <RepeatIcon className='footer__green' />
       </div>
       <div className='footer__right'>
         <Grid container spacing={2}>
