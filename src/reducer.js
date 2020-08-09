@@ -5,6 +5,9 @@ export const initialState = {
   discover_weekly: null,
   item: null,
   spotify: null,
+  top_artists: null,
+  device_id: null,
+  audio: null,
   token: localStorage.getItem('token'),
 };
 
@@ -15,6 +18,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         user: action.user,
+      };
+    case 'SET_TOP_ARTISTS':
+      return {
+        ...state,
+        top_artists: action.top_artists,
       };
     case 'SET_TOKEN':
       return {

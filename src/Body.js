@@ -13,6 +13,7 @@ const Body = () => {
     spotify
       .play({
         context_uri: `spotify:playlist:${discover_weekly.id}`,
+        device_id: localStorage.getItem('device_id'),
       })
       .then((res) => {
         spotify.getMyCurrentPlayingTrack().then((r) => {
@@ -32,6 +33,7 @@ const Body = () => {
     spotify
       .play({
         uris: [`spotify:track:${id}`],
+        device_id: localStorage.getItem('device_id'),
       })
       .then((res) => {
         spotify.getMyCurrentPlayingTrack().then((r) => {
@@ -44,6 +46,9 @@ const Body = () => {
             playing: true,
           });
         });
+      })
+      .catch((err) => {
+        console.log('err :>> ', err);
       });
   };
 

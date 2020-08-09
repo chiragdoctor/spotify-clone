@@ -14,7 +14,6 @@ const Footer = () => {
   const [{ spotify, playing, item }, dispatch] = useDataLayerValue();
 
   useEffect(() => {
-    console.log('spotify :>> ', spotify);
     spotify &&
       spotify.getMyCurrentPlaybackState().then((r) => {
         dispatch({
@@ -30,33 +29,52 @@ const Footer = () => {
   }, [spotify]);
 
   const skipNext = () => {
-    spotify && spotify.skipToNext();
     spotify &&
-      spotify.getMyCurrentPlaybackState().then((r) => {
-        dispatch({
-          type: 'SET_PLAYING',
-          playing: r.is_playing,
-        });
-        dispatch({
-          type: 'SET_ITEM',
-          item: r.item,
-        });
+      spotify.skipToNext().then(() => {
+        spotify &&
+          spotify.getMyCurrentPlaybackState().then((r) => {
+            dispatch({
+              type: 'SET_PLAYING',
+              playing: r.is_playing,
+            });
+            dispatch({
+              type: 'SET_ITEM',
+              item: r.item,
+            });
+          });
       });
   };
 
   const skipPrevious = () => {
-    spotify && spotify.skipToPrevious();
     spotify &&
-      spotify.getMyCurrentPlaybackState().then((r) => {
-        dispatch({
-          type: 'SET_PLAYING',
-          playing: r.is_playing,
-        });
-        dispatch({
-          type: 'SET_ITEM',
-          item: r.item,
+      spotify.skipToPrevious().then(() => {
+        spotify.getMyCurrentPlaybackState().then((r) => {
+          dispatch({
+            type: 'SET_PLAYING',
+            playing: r.is_playing,
+          });
+          dispatch({
+            type: 'SET_ITEM',
+            item: r.item,
+          });
         });
       });
+  };
+
+  const handlePlayPause = () => {
+    if (playing) {
+      spotify.pause();
+      dispatch({
+        type: 'SET_PLAYING',
+        playing: false,
+      });
+    } else {
+      spotify.play();
+      dispatch({
+        type: 'SET_PLAYING',
+        playing: true,
+      });
+    }
   };
 
   return (
@@ -64,7 +82,7 @@ const Footer = () => {
       <div className='footer__left'>
         <img
           src={item?.album.images[0].url}
-          alt={item?.name}
+          alt={item?.name || ''}
           className='footer__albumLogo'
         />
         {item ? (
@@ -81,13 +99,21 @@ const Footer = () => {
       </div>
       <div className='footer__center'>
         <ShuffleIcon className='footer__green' />
-        <SkipPreviousIcon className='footer__icon' onClick={skipNext} />
+        <SkipPreviousIcon className='footer__icon' onClick={skipPrevious} />
         {playing ? (
-          <PauseCircleOutlineIcon fontSize='large' className='footer__icon' />
+          <PauseCircleOutlineIcon
+            fontSize='large'
+            className='footer__icon'
+            onClick={handlePlayPause}
+          />
         ) : (
-          <PlayCircleOutlineIcon fontSize='large' className='footer__icon' />
+          <PlayCircleOutlineIcon
+            fontSize='large'
+            className='footer__icon'
+            onClick={handlePlayPause}
+          />
         )}
-        <SkipNextIcon onClick={skipPrevious} className='footer__icon' />
+        <SkipNextIcon className='footer__icon' onClick={skipNext} />
         <RepeatIcon className='footer__green' />
       </div>
       <div className='footer__right'>
