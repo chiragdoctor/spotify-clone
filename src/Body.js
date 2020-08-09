@@ -1,5 +1,6 @@
 import React from 'react';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
+import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import './Body.css';
@@ -8,25 +9,33 @@ import { useDataLayerValue } from './DataLayer';
 import SongRow from './SongRow';
 
 const Body = () => {
-  const [{ discover_weekly, spotify }, dispatch] = useDataLayerValue();
+  const [{ discover_weekly, spotify, playing }, dispatch] = useDataLayerValue();
   const playPlaylist = () => {
-    spotify
-      .play({
-        context_uri: `spotify:playlist:${discover_weekly.id}`,
-        device_id: localStorage.getItem('device_id'),
-      })
-      .then((res) => {
-        spotify.getMyCurrentPlayingTrack().then((r) => {
-          dispatch({
-            type: 'SET_ITEM',
-            item: r.item,
-          });
-          dispatch({
-            type: 'SET_PLAYING',
-            playing: true,
+    if (playing) {
+      spotify.pause();
+      dispatch({
+        type: 'SET_PLAYING',
+        playing: false,
+      });
+    } else {
+      spotify
+        .play({
+          context_uri: `spotify:playlist:${discover_weekly.id}`,
+          device_id: localStorage.getItem('device_id'),
+        })
+        .then(() => {
+          spotify.getMyCurrentPlayingTrack().then((r) => {
+            dispatch({
+              type: 'SET_ITEM',
+              item: r.item,
+            });
+            dispatch({
+              type: 'SET_PLAYING',
+              playing: true,
+            });
           });
         });
-      });
+    }
   };
 
   const playSong = (id) => {
@@ -35,7 +44,7 @@ const Body = () => {
         uris: [`spotify:track:${id}`],
         device_id: localStorage.getItem('device_id'),
       })
-      .then((res) => {
+      .then(() => {
         spotify.getMyCurrentPlayingTrack().then((r) => {
           dispatch({
             type: 'SET_ITEM',
@@ -65,10 +74,17 @@ const Body = () => {
       </div>
       <div className='body__songs'>
         <div className='body__icons'>
-          <PlayCircleFilledIcon
-            className='body__shuffle'
-            onClick={playPlaylist}
-          />
+          {playing ? (
+            <PauseCircleFilledIcon
+              className='body__shuffle'
+              onClick={playPlaylist}
+            />
+          ) : (
+            <PlayCircleFilledIcon
+              className='body__shuffle'
+              onClick={playPlaylist}
+            />
+          )}
           <FavoriteIcon fontSize='large' />
           <MoreHorizIcon />
         </div>
